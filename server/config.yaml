@@ -1,0 +1,4 @@
+app_name: "SafeShare"
+debug: true
+server:
+  port: 8080

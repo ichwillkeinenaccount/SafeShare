@@ -46,3 +46,30 @@ SafeShare is written in Go and vanilla JavaScript/TypeScript.
 - [PostgreSQL](https://www.postgresql.org/)
 - [MinIO](https://github.com/minio/minio)
 
+
+
+.
+├── cmd/
+│   └── <app-name>/
+│       └── main.go
+├── pkg/
+│   └── <your-packages>/
+├── internal/
+│   └── <internal-packages>/
+├── api/
+│   └── <api-definitions>/
+├── web/
+│   └── <frontend-files>/
+├── configs/
+│   └── <config-files>/
+├── scripts/
+│   └── <scripts>/
+├── build/
+│   └── <build-output>/
+├── deployments/
+│   └── <deployment-configs>/
+├── test/
+│   └── <test-data>/
+├── go.mod
+├── go.sum
+└── README.md
