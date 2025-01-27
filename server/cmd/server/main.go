@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"log/slog"
+	"server/internal/api"
 )
 
 func main() {
 	initConfig()
+	slog.Info(fmt.Sprintf("Starting %s", viper.GetString("app_name")))
+	if viper.GetBool("debug") {
+		slog.Info("Debug enabled")
+	}
 
-	appName := viper.GetString("app_name")
-	debug := viper.GetBool("debug")
-	port := viper.GetInt("server.port")
-	slog.Info(fmt.Sprintf("%s started", appName))
-	slog.Info(fmt.Sprintf("Debug enabled: %t", debug))
-	slog.Info(fmt.Sprintf("Server running in port: %d", port))
+	api.StartApi()
 
 }
 
