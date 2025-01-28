@@ -1,0 +1,13 @@
+info:
+  contact:
+    name: SafeShare GitHub
+    url: https://github.com/ichwillkeinenaccount/SafeShare
+  description: This is the API for SafeShare, a secure text sharing service.
+  license:
+    name: All Rights Reserved
+    url: https://en.wikipedia.org/wiki/All_rights_reserved
+  termsOfService: https://github.com/ichwillkeinenaccount/SafeShare
+  title: SafeShare API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

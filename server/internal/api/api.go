@@ -3,9 +3,9 @@ package api
 import (
 	"fmt"
 	"github.com/spf13/viper"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"log/slog"
 	"net/http"
-	"time"
 )
 
 type responseWriter struct {
@@ -34,11 +34,23 @@ func (rw *responseWriter) WriteHeader(code int) {
 	return
 }
 
+// StartApi starts the API server
+//
+//	@title			SafeShare API
+//	@version		1.0
+//	@description	This is the API for SafeShare, a secure text sharing service.
+//	@termsOfService	https://github.com/ichwillkeinenaccount/SafeShare
+//	@contact.name	SafeShare GitHub
+//	@contact.url	https://github.com/ichwillkeinenaccount/SafeShare
+//	@license.name	All Rights Reserved
+//	@license.url	https://en.wikipedia.org/wiki/All_rights_reserved
+//	@server			http://localhost:8080
 func StartApi() {
 	textHandler := &TextHandler{}
 
 	router := initRoutes(textHandler)
 	routerWithMiddlewares := chainMiddlewares(router)
+
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%d", viper.GetInt("server.port")),
 		Handler: routerWithMiddlewares,
@@ -54,63 +66,9 @@ func StartApi() {
 
 func initRoutes(textHandler *TextHandler) *http.ServeMux {
 	mux := http.NewServeMux()
+	mux.Handle("GET /api/v1/", httpSwagger.Handler(httpSwagger.URL("docs/swagger.yaml")))
+	mux.Handle("GET /api/v1/docs/", http.StripPrefix("/api/v1/docs", http.FileServer(http.Dir("internal/api/docs"))))
 	mux.HandleFunc("GET /api/v1/text/", textHandler.getAll)
 	mux.HandleFunc("POST /api/v1/text/create", textHandler.postText)
 	return mux
-}
-
-// chainMiddlewares applies a series of middlewares to an HTTP handler.
-// The middlewares are applied in reverse order, with the first middleware
-// being the innermost and the last middleware being the outermost.
-//
-// Parameters:
-//
-//	handler (http.Handler): The original HTTP handler to which the middlewares will be applied.
-//
-// Returns:
-//
-//	http.Handler: The HTTP handler wrapped with the specified middlewares.
-func chainMiddlewares(handler http.Handler) http.Handler {
-	// Apply headerCheckMiddleware first
-	handler = headerCheckMiddleware(handler)
-	// Apply loggingMiddleware next
-	handler = loggingMiddleware(handler)
-
-	return handler
-}
-
-// loggingMiddleware logs each request
-//
-// Parameters:
-//
-//	next (http.Handler): The next HTTP handler to be called in the middleware chain.
-//
-// Returns:
-//
-//	http.Handler: A new HTTP handler that wraps the next handler with logging functionality.
-func loggingMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		start := time.Now()
-		wrapped := wrapResponseWriter(w)
-		next.ServeHTTP(wrapped, r)
-		slog.Info("Request received",
-			"status", wrapped.status,
-			"method", r.Method,
-			"path", r.URL.EscapedPath(),
-			"duration", time.Since(start),
-			"headers", r.Header,
-			"client_ip", r.RemoteAddr,
-		)
-	})
-}
-
-// headerCheckMiddleware checks for a specific header
-func headerCheckMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Header.Get("X-Custom-Header") == "" {
-			http.Error(w, "Missing X-Custom-Header", http.StatusForbidden)
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
 }

@@ -37,6 +37,7 @@ SafeShare is written in Go and vanilla JavaScript/TypeScript.
 - Use sqlc for SQL generation?
 - Use a salt for additional security in database?
 - CLI version for sharing files and text directly from the terminal?
+- Use air for hot reloading?
 
 ## Build with 🛠️
 
