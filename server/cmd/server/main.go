@@ -14,7 +14,7 @@ func main() {
 		slog.Info("Debug enabled")
 	}
 
-	api.StartApi()
+	api.StartServer()
 
 }
 
