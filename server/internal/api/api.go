@@ -19,9 +19,7 @@ import (
 //	@license.name	All Rights Reserved
 //	@license.url	https://en.wikipedia.org/wiki/All_rights_reserved
 func StartServer() {
-	router := http.NewServeMux()
-	loadRoutes(router)
-
+	router := loadRoutes()
 	stack := middleware.CreateStack(
 		middleware.Logging,
 		middleware.Authentication,
@@ -41,7 +39,8 @@ func StartServer() {
 	}
 }
 
-func loadRoutes(router *http.ServeMux) *http.ServeMux {
+func loadRoutes() *http.ServeMux {
+	router := http.NewServeMux()
 	router.Handle("GET /docs/swagger.yaml", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "internal/api/docs/swagger.yaml")
 	}))
@@ -50,7 +49,7 @@ func loadRoutes(router *http.ServeMux) *http.ServeMux {
 	}))
 
 	textHandler := &TextHandler{}
-	router.HandleFunc("GET /text/", textHandler.getAll)
+	router.HandleFunc("GET /text", textHandler.getAll)
 	router.HandleFunc("POST /text/create", textHandler.postText)
 
 	v1 := http.NewServeMux()

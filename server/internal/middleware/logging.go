@@ -51,7 +51,6 @@ func Logging(next http.Handler) http.Handler {
 			"status_code", wrapped.statusCode,
 			"duration", time.Since(start),
 			"client_ip", r.RemoteAddr,
-			"user_id", r.Context().Value(AuthUserID),
 		)
 	})
 }
