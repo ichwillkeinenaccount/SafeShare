@@ -1,0 +1,7 @@
+{
+    "components": {},
+    "info": {"contact":{"name":"SafeShare GitHub","url":"https://github.com/ichwillkeinenaccount/SafeShare"},"description":"This is the API for SafeShare, a secure text sharing service.","license":{"name":"All Rights Reserved","url":"https://en.wikipedia.org/wiki/All_rights_reserved"},"termsOfService":"https://github.com/ichwillkeinenaccount/SafeShare","title":"SafeShare API","version":"1.0"},
+    "externalDocs": {"description":"","url":""},
+    "paths": {"/api/v1/text/":{"get":{"description":"get all texts","responses":{"200":{"content":{"application/json":{"schema":{"type":"string"}}},"description":"OK"},"400":{"content":{"application/json":{"schema":{"type":"string"}}},"description":"Bad Request"},"404":{"content":{"application/json":{"schema":{"type":"string"}}},"description":"Not Found"},"500":{"content":{"application/json":{"schema":{"type":"string"}}},"description":"Internal Server Error"}},"summary":"Show all texts","tags":["text"]}}},
+    "openapi": "3.1.0"
+}

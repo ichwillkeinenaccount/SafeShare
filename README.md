@@ -26,23 +26,35 @@ SafeShare is written in Go and vanilla JavaScript/TypeScript.
 
 ### Technical ideas 💡
 - Use three word urls for sharing
-- Use structured logging (slog?)
 - Use [golang-migrate](https://github.com/golang-migrate/migrate) for database migrations
-- Use MinIO as a storage backend
-- Use [Viper](https://github.com/spf13/viper) and [Cobra](https://github.com/spf13/cobra) for configuration and CLI
-- Use xyz for openapi generation
-  - Use Bruno for API testing
 - Use go tool
 - Use OpenTelemetry for tracing
 - Use sqlc for SQL generation?
 - Use a salt for additional security in database?
-- CLI version for sharing files and text directly from the terminal?
+- CLI version for sharing files and text directly from the terminal ([Cobra](https://github.com/spf13/cobra))?
+
+## Development
+- Clone the repository
+- Run `docker-compose -f .development/docker-compose.yml up` to start the development environment
+- Open [http://localhost:8081/#/](http://localhost:8081/#/) in your browser to see the Swagger UI
+- The API is available at [http://localhost:8080](http://localhost:8080)
+
+### Development Tools 🧰
+- [Docker](https://www.docker.com/)
+- [Bruno](https://github.com/usebruno/bruno)
+- [Swagger-UI](https://swagger.io/tools/swagger-ui/)
 
 ## Build with 🛠️
 
+### Server 🖥️
 - [Go](https://go.dev/)
+- [Swag](https://github.com/swaggo/swag)
+- [Viper](https://github.com/spf13/viper)
+
+### Frontend 🌐
 - [TypeScript](https://www.typescriptlang.org/)
 - [TailwindCSS](https://tailwindcss.com/)
+
+### Database 🗄️
 - [PostgreSQL](https://www.postgresql.org/)
 - [MinIO](https://github.com/minio/minio)
-
