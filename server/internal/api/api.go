@@ -3,7 +3,6 @@ package api
 import (
 	"fmt"
 	"github.com/spf13/viper"
-	httpSwagger "github.com/swaggo/http-swagger"
 	"log/slog"
 	"net/http"
 )
@@ -36,15 +35,15 @@ func (rw *responseWriter) WriteHeader(code int) {
 
 // StartApi starts the API server
 //
-//	@title			SafeShare API
-//	@version		1.0
-//	@description	This is the API for SafeShare, a secure text sharing service.
-//	@termsOfService	https://github.com/ichwillkeinenaccount/SafeShare
-//	@contact.name	SafeShare GitHub
-//	@contact.url	https://github.com/ichwillkeinenaccount/SafeShare
-//	@license.name	All Rights Reserved
-//	@license.url	https://en.wikipedia.org/wiki/All_rights_reserved
-//	@server			http://localhost:8080
+//		@title			SafeShare API
+//		@version		1.0
+//		@description	This is the API for SafeShare, a secure text sharing service.
+//		@termsOfService	https://github.com/ichwillkeinenaccount/SafeShare
+//		@contact.name	SafeShare GitHub
+//		@contact.url	https://github.com/ichwillkeinenaccount/SafeShare
+//		@license.name	All Rights Reserved
+//		@license.url	https://en.wikipedia.org/wiki/All_rights_reserved
+//	 @server
 func StartApi() {
 	textHandler := &TextHandler{}
 
@@ -66,8 +65,13 @@ func StartApi() {
 
 func initRoutes(textHandler *TextHandler) *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.Handle("GET /api/v1/", httpSwagger.Handler(httpSwagger.URL("docs/swagger.yaml")))
-	mux.Handle("GET /api/v1/docs/", http.StripPrefix("/api/v1/docs", http.FileServer(http.Dir("internal/api/docs"))))
+	mux.Handle("/api/v1/docs/swagger.yaml", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "internal/api/docs/swagger.yaml")
+	}))
+	mux.Handle("/api/v1/docs/swagger.json", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "internal/api/docs/swagger.json")
+	}))
+
 	mux.HandleFunc("GET /api/v1/text/", textHandler.getAll)
 	mux.HandleFunc("POST /api/v1/text/create", textHandler.postText)
 	return mux
