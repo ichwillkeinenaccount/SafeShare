@@ -1,8 +1,11 @@
+### common settings
 app_name: "SafeShare"
 debug: true
 development: true
 server:
   port: 8080
+
+### logging
 logging:
   console:
     enabled: true
