@@ -1,42 +1,24 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-	"github.com/spf13/cobra"
+	flag "github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"log/slog"
 	"server/internal/api"
 )
 
 func main() {
-	var rootCmd = &cobra.Command{
-		Use:   "server",
-		Short: "A simple server",
-		Long:  "A simple server that demonstrates how to use Cobra and Viper",
-		Run: func(cmd *cobra.Command, args []string) {
-			configFile := flag.String("config", "config.yaml", "Path to the configuration file")
-			flag.Parse()
-			slog.Info(fmt.Sprintf("configFile: %s", *configFile))
+	configFile := flag.StringP("config", "c", "./config.yaml", "config file (default is ./config.yaml)")
+	flag.Parse()
 
-			readConfig(*configFile)
-			slog.Info(fmt.Sprintf("Starting %s", viper.GetString("app_name")))
-			if viper.GetBool("debug") {
-				slog.Info("Debug enabled")
-			}
-			api.StartServer()
-		},
+	readConfig(*configFile)
+
+	slog.Info(fmt.Sprintf("Starting %s", viper.GetString("app_name")))
+	if viper.GetBool("debug") {
+		slog.Info("Debug enabled")
 	}
-
-	var cfgFile string
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra.yaml)")
-	rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "Author name for copyright attribution")
-
-	err := rootCmd.Execute()
-	if err != nil {
-		slog.Error("error executing cobra command", "error", err)
-		return
-	}
+	api.StartServer()
 }
 
 // readConfig reads the configuration file.
