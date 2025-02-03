@@ -27,8 +27,8 @@ jobs:
     
     - name: Test
       run: go test
-      working-directory: safe-share-server
+      working-directory: safe-share-server/cmd/server
 
     - name: Build
       run: go build
-      working-directory: safe-share-server
+      working-directory: safe-share-server/cmd/server
