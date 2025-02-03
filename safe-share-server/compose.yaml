@@ -1,0 +1,82 @@
+volumes:
+  db-data:
+
+services:
+  safe-share-server:
+    build:
+      context: .
+      target: final
+    ports:
+      - "8081:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres
+    restart: always
+    user: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=SafeShare
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres # only for local development
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  swagger-local:
+    image: docker.swagger.io/swaggerapi/swagger-ui
+    ports:
+      - "4000:8080"
+    environment:
+      - SWAGGER_JSON_URL=http://localhost:8080/api/v1/docs/swagger.json
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.swagger-local.rule=Host(`swagger-local.localhost`)"
+      - "traefik.http.routers.swagger-local.entrypoints=web"
+      - "traefik.http.services.swagger-local.loadbalancer.server.port=8080"
+
+  swagger-docker:
+    image: docker.swagger.io/swaggerapi/swagger-ui
+    ports:
+      - "4001:8080"
+    environment:
+      - SWAGGER_JSON_URL=http://localhost:8081/api/v1/docs/swagger.json
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.swagger-docker.rule=Host(`swagger-docker.localhost`)"
+      - "traefik.http.routers.swagger-docker.entrypoints=web"
+      - "traefik.http.services.swagger-docker.loadbalancer.server.port=8080"
+
+  grafana-otel:
+    image: grafana/otel-lgtm:latest
+    ports:
+      - "3000:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.localhost`)"
+      - "traefik.http.routers.grafana.entrypoints=web"
+
+  traefik:
+    image: traefik:latest
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "4080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`localhost`)"
+      - "traefik.http.routers.traefik.entrypoints=web"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"

@@ -26,13 +26,11 @@ SafeShare is written in Go and vanilla JavaScript/TypeScript.
 
 ### Technical ideas 💡
 - Use three word urls for sharing
-- Use [golang-migrate](https://github.com/golang-migrate/migrate) for database migrations
 - Use go tool
 - Use OpenTelemetry for tracing
-- Use sqlc for SQL generation?
+- Use sqlc for SQL generation
 - Use a salt for additional security in database?
 - CLI version for sharing files and text directly from the terminal ([Cobra](https://github.com/spf13/cobra))?
-- Use Cobra for arguments?
 
 ## Development
 - Clone the repository
