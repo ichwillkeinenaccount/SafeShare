@@ -7,7 +7,7 @@ import (
 
 func TestReadConfig_Success(t *testing.T) {
 	assert.NotPanics(t, func() {
-		readConfig("config.yaml")
+		readConfig("config_test.yaml")
 	})
 }
 
