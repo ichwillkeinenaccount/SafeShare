@@ -23,12 +23,12 @@ jobs:
 
     - name: Install dependencies
       run: go mod tidy
-      working-directory: server
+      working-directory: safe-share-server
     
     - name: Test
       run: go test
-      working-directory: server/cmd/server
+      working-directory: safe-share-server
 
     - name: Build
       run: go build
-      working-directory: server/cmd/server
+      working-directory: safe-share-server
