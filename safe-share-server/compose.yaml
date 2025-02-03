@@ -6,7 +6,6 @@ services:
     build:
       context: .
       target: final
-      no_cache: true
     ports:
       - "8081:8080"
     depends_on:
