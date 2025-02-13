@@ -13,3 +13,7 @@ logging:
   file:
     enabled: true
     level: debug
+
+### database
+database:
+  url: "postgresql://postgres:postgres@localhost:5432/SafeShare"
